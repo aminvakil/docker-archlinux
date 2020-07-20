@@ -11,6 +11,6 @@ RUN pacman -Suy --noconfirm base-devel && \
 
 RUN useradd -M devel && usermod -aG wheel devel && echo "devel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/devel
 
-USER devel
-
 ENTRYPOINT ["/usr/lib/systemd/systemd"]
+
+USER devel
