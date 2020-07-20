@@ -6,6 +6,7 @@ LABEL maintainer="Amin Vakil <info@aminvakil.com>"
 
 ENV LANG=en_US.UTF-8
 
-RUN pacman -Suy --noconfirm base-devel
+RUN pacman -Suy --noconfirm base-devel && \
+    rm -rf /var/cache/pacman/pkg/*
 
 ENTRYPOINT ["/usr/lib/systemd/systemd"]
