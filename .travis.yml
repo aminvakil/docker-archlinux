@@ -22,6 +22,6 @@ script:
 - hadolint --ignore DL3007 Dockerfile
 - docker stop ${DOCKERCONTAINER} && docker rm -fv ${DOCKERCONTAINER}
 after_success:
-- docker tag ${TRAVIS_REPO_SLUG}:${TRAVIS_COMMIT} aminvakil/archlinux:devel
-- echo "$DOCKER_PASSWORD" | docker login -u aminvakil --password-stdin
-- docker push aminvakil/archlinux:devel
+- docker tag ${TRAVIS_REPO_SLUG}:${TRAVIS_COMMIT} quay.io/aminvakil/archlinux:devel
+- docker login quay.io -u="$QUAY_USERNAME" -p="$QUAY_PASSWORD"
+- docker push quay.io/aminvakil/archlinux:devel
