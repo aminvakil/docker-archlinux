@@ -1,4 +1,4 @@
-FROM archlinux:latest
+FROM archlinux:20200908
 
 ENV container docker
 
