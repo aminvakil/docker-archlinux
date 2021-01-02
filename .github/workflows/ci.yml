@@ -85,3 +85,11 @@ jobs:
           pull: true
           push: true
           tags: quay.io/aminvakil/archlinux:devel
+
+      - name: Push to Quay (nvchecker)
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Dockerfile_nvchecker
+          pull: true
+          push: true
+          tags: quay.io/aminvakil/archlinux:nvchecker
