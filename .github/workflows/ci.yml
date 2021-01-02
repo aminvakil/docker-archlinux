@@ -41,6 +41,7 @@ jobs:
         run: |
           docker build --no-cache --tag ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID} .
           docker build --no-cache --tag ${GITHUB_REPOSITORY}:devel -f Dockerfile_devel .
+          docker build --no-cache --tag ${GITHUB_REPOSITORY}:nvchecker -f Dockerfile_nvchecker .
 
       - name: Run a container of created image.
         run: |
