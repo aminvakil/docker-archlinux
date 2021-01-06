@@ -41,7 +41,6 @@ jobs:
         run: |
           docker build --no-cache --tag ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID} .
           docker build --no-cache --tag ${GITHUB_REPOSITORY}:devel -f Dockerfile_devel .
-          docker build --no-cache --tag ${GITHUB_REPOSITORY}:nvchecker -f Dockerfile_nvchecker .
 
       - name: Run a container of created image.
         run: |
@@ -86,11 +85,3 @@ jobs:
           pull: true
           push: true
           tags: quay.io/aminvakil/archlinux:devel
-
-      - name: Push to Quay (nvchecker)
-        uses: docker/build-push-action@v2
-        with:
-          file: ./Dockerfile_nvchecker
-          pull: true
-          push: true
-          tags: quay.io/aminvakil/archlinux:nvchecker
