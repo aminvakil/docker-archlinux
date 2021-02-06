@@ -42,17 +42,23 @@ jobs:
           docker build --no-cache --tag ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID} .
           docker build --no-cache --tag ${GITHUB_REPOSITORY}:devel -f Dockerfile_devel .
 
-      - name: Run a container of created image.
+      - name: Run a container of created images.
         run: |
-          DOCKERCONTAINER=$(docker run -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro ${GITHUB_REPOSITORY}:devel)
+          BASECONTAINER=$(docker run -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID})
+          DEVELCONTAINER=$(docker run -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro ${GITHUB_REPOSITORY}:devel)
           sleep 5
-          echo "DOCKERCONTAINER=$DOCKERCONTAINER" >> $GITHUB_ENV
+          echo "BASECONTAINER=$BASECONTAINER" >> $GITHUB_ENV
+          echo "DEVELCONTAINER=$DEVELCONTAINER" >> $GITHUB_ENV
 
-      - name: Check if container is still running.
-        run: docker ps -f id=${DOCKERCONTAINER}
+      - name: Check if containers are still running.
+        run: |
+          docker ps -f id=${BASECONTAINER}
+          docker ps -f id=${DEVELCONTAINER}
 
-      - name: Check if the container is correctly stopped and removed.
-        run: docker stop ${DOCKERCONTAINER} && docker rm -fv ${DOCKERCONTAINER}
+      - name: Check if the containers can be correctly stopped and removed.
+        run: |
+          docker stop ${BASECONTAINER} && docker rm -fv ${BASECONTAINER}
+          docker stop ${DEVELCONTAINER} && docker rm -fv ${DEVELCONTAINER}
 
   deploy:
     if: ${{ github.ref == 'refs/heads/master' }}
