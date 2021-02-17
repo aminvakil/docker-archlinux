@@ -40,6 +40,14 @@ jobs:
       - name: execute uname -a
         run: uname -a
 
+      - name: build latest runc
+        run: |
+          sudo apt-get install libseccomp-dev
+          git clone https://github.com/opencontainers/runc
+          cd runc
+          make
+          sudo make install
+
       - name: Build docker image.
         run: |
           docker build --no-cache --tag ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID} .
