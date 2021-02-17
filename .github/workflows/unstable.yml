@@ -37,6 +37,9 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v2
 
+      - name: execute uname -a
+        run: uname -a
+
       - name: Build docker image.
         run: |
           docker build --no-cache --tag ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID} .
