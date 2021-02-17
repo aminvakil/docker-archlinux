@@ -1,0 +1,93 @@
+---
+name: CI/CD
+'on':
+  pull_request:
+  push:
+    branches:
+      - unstable
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+
+  hadolint:
+    name: Test dockerfile syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Install hadolint.
+        run: |
+          sudo curl -L https://github.com/hadolint/hadolint/releases/download/v$HADOLINT_VERSION/hadolint-$(uname -s)-$(uname -m) -o /usr/local/bin/hadolint
+          sudo chmod 755 /usr/local/bin/hadolint
+        env:
+          HADOLINT_VERSION: 1.22.1
+
+      - name: Run hadolint.
+        run: hadolint Dockerfile
+
+      - name: Run hadolint on devel.
+        run: hadolint Dockerfile_devel
+
+  build:
+    name: Build and test docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the codebase.
+        uses: actions/checkout@v2
+
+      - name: Build docker image.
+        run: |
+          docker build --no-cache --tag ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID} .
+          docker build --no-cache --tag ${GITHUB_REPOSITORY}:devel -f Dockerfile_devel .
+
+      - name: Run a container of created images.
+        run: |
+          BASECONTAINER=$(docker run -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID})
+          DEVELCONTAINER=$(docker run -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro ${GITHUB_REPOSITORY}:devel)
+          sleep 5
+          echo "BASECONTAINER=$BASECONTAINER" >> $GITHUB_ENV
+          echo "DEVELCONTAINER=$DEVELCONTAINER" >> $GITHUB_ENV
+
+      - name: Check if containers are still running.
+        run: |
+          docker ps -f id=${BASECONTAINER}
+          docker ps -f id=${DEVELCONTAINER}
+
+      - name: Check if the containers can be correctly stopped and removed.
+        run: |
+          docker stop ${BASECONTAINER} && docker rm -fv ${BASECONTAINER}
+          docker stop ${DEVELCONTAINER} && docker rm -fv ${DEVELCONTAINER}
+
+  deploy:
+    if: ${{ github.ref == 'refs/heads/unstable' }}
+    needs: [hadolint, build]
+    name: Push to Quay
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Quay
+        uses: docker/login-action@v1
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_PASSWORD }}
+
+      - name: Push to Quay
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Dockerfile
+          pull: true
+          push: true
+          tags: quay.io/aminvakil/archlinux:unstable
+
+      - name: Push to Quay (devel)
+        uses: docker/build-push-action@v2
+        with:
+          file: ./Dockerfile_devel
+          pull: true
+          push: true
+          tags: quay.io/aminvakil/archlinux:unstabledevel
