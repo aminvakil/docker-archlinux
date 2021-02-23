@@ -37,9 +37,6 @@ jobs:
       - name: Check out the codebase.
         uses: actions/checkout@v2
 
-      - name: execute uname -a
-        run: uname -a
-
       - name: build latest runc
         run: |
           sudo apt-get install libseccomp-dev
