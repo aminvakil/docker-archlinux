@@ -84,14 +84,6 @@ jobs:
           username: ${{ secrets.QUAY_USERNAME }}
           password: ${{ secrets.QUAY_PASSWORD }}
 
-      - name: build latest runc
-        run: |
-          sudo apt-get install libseccomp-dev
-          git clone https://github.com/opencontainers/runc
-          cd runc
-          make
-          sudo make install
-
       - name: Push to Quay
         uses: docker/build-push-action@v2
         with:
