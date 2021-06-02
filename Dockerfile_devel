@@ -1,4 +1,4 @@
-FROM archlinux:base-20210523.0.23638
+FROM archlinux:base-20210530.0.24217
 
 ENV container docker
 
