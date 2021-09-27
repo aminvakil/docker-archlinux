@@ -6,7 +6,7 @@ LABEL maintainer="Amin Vakil <info@aminvakil.com>"
 
 ENV LANG=en_US.UTF-8
 
-RUN pacman -Suy --noconfirm base-devel && \
+RUN pacman -Syu --noconfirm base-devel && \
     rm -rf /var/cache/pacman/pkg/* && \
     useradd -m devel && echo "devel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/01_devel
 
