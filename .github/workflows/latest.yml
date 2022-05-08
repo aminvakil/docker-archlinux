@@ -89,7 +89,7 @@ jobs:
           password: ${{ secrets.QUAY_PASSWORD }}
 
       - name: Push to Quay
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           file: ./Dockerfile
           pull: true
@@ -97,7 +97,7 @@ jobs:
           tags: quay.io/aminvakil/archlinux:latest
 
       - name: Push to Quay (devel)
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v3
         with:
           file: ./Dockerfile_devel
           pull: true
