@@ -1,0 +1,3 @@
+# libcap does not use the net package from Golang, so it's completely bogus
+CVE-2023-45288
+CVE-2024-24788
