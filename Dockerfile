@@ -7,4 +7,4 @@ LABEL maintainer="Amin Vakil <info@aminvakil.com>"
 RUN pacman -Syu --noconfirm && \
     rm -rf /var/cache/pacman/pkg/*
 
-CMD ["/usr/lib/systemd/systemd"]
+ENTRYPOINT ["/usr/lib/systemd/systemd"]

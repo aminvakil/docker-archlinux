@@ -8,4 +8,4 @@ RUN pacman -Syu --noconfirm base-devel && \
     rm -rf /var/cache/pacman/pkg/* && \
     useradd -m devel && echo "devel ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/01_devel
 
-CMD ["/usr/lib/systemd/systemd"]
+ENTRYPOINT ["/usr/lib/systemd/systemd"]
