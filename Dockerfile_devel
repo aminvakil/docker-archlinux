@@ -1,6 +1,6 @@
 FROM archlinux:base-20240922.0.264758
 
-ENV container docker
+ENV container=docker
 
 LABEL maintainer="Amin Vakil <info@aminvakil.com>"
 
