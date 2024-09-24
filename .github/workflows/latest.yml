@@ -44,8 +44,8 @@ jobs:
 
       - name: Run a container of created images.
         run: |
-          BASECONTAINER=$(docker run -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID})
-          DEVELCONTAINER=$(docker run -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro ${GITHUB_REPOSITORY}:devel)
+          BASECONTAINER=$(docker run --detach --privileged --cgroup-parent=docker.slice --cgroupns private --tmpfs /run --tmpfs /run/lock ${GITHUB_REPOSITORY}:${GITHUB_RUN_ID})
+          DEVELCONTAINER=$(docker run --detach --privileged --cgroup-parent=docker.slice --cgroupns private --tmpfs /run --tmpfs /run/lock ${GITHUB_REPOSITORY}:devel)
           sleep 5
           echo "BASECONTAINER=$BASECONTAINER" >> $GITHUB_ENV
           echo "DEVELCONTAINER=$DEVELCONTAINER" >> $GITHUB_ENV
