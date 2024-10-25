@@ -65,6 +65,8 @@ jobs:
         with:
           image-ref: ${{ github.repository }}:${{ github.run_id }}
           exit-code: '1'
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 
       - name: Run Trivy vulnerability scanner.
         uses: aquasecurity/trivy-action@master
