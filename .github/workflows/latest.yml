@@ -73,6 +73,8 @@ jobs:
         with:
           image-ref: ${{ github.repository }}:devel
           exit-code: '1'
+        env:
+          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 
   deploy:
     if: ${{ github.ref == 'refs/heads/master' }}
