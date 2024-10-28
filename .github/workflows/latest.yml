@@ -65,6 +65,7 @@ jobs:
         with:
           image-ref: ${{ github.repository }}:${{ github.run_id }}
           exit-code: '1'
+          severity: 'CRITICAL,HIGH'
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 
@@ -73,6 +74,7 @@ jobs:
         with:
           image-ref: ${{ github.repository }}:devel
           exit-code: '1'
+          severity: 'CRITICAL,HIGH'
         env:
           TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 
