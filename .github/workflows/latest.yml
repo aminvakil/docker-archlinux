@@ -72,8 +72,6 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
           skip-files: /usr/bin/captree # libcap does not use the net package from Golang, so it's completely bogus
-        env:
-          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 
   deploy:
     if: ${{ github.ref == 'refs/heads/master' }}
