@@ -64,8 +64,6 @@ jobs:
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
           skip-files: /usr/bin/captree # libcap does not use the net package from Golang, so it's completely bogus
-        env:
-          TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
 
       - name: Run Trivy vulnerability scanner.
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
